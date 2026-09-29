@@ -1,0 +1,23 @@
+{
+    "name": "karrakoliko/test-assesment-sep-2026",
+    "description": "",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests"
+        }
+    },
+    "authors": [
+        {
+            "name": "karrakoliko",
+            "email": "cv@karrakoliko.lol"
+        }
+    ],
+    "minimum-stability": "stable",
+    "license": "MIT"
+}
