@@ -10,6 +10,8 @@ services:
       - .:/srv/app
     depends_on:
       - db
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   nginx:
     build:
