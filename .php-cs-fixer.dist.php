@@ -8,7 +8,8 @@ $finder = (new PhpCsFixer\Finder())
 
 return (new PhpCsFixer\Config())
     ->setRules([
-        '@PSR12' => true
+        '@PSR12' => true,
+        'no_unused_imports' => true
     ])
     ->setCacheFile(sys_get_temp_dir().'/.php-cs-fixer.cache')
     ->setFinder($finder)
