@@ -2,6 +2,8 @@
 
 use App\App\Controller\IndexController;
 use App\Core\Di\ControllerLocatorPass;
+use App\Core\Persistence\Database\Resetter\DatabaseResetter;
+use App\Core\Persistence\Database\Resetter\DatabaseResetterInterface;
 use App\Core\Router\ArgumentResolver\ArgumentResolver;
 use App\Core\Router\ArgumentResolver\ArgumentResolverInterface;
 use App\Core\Router\ControllerReference;
@@ -74,6 +76,14 @@ return static function (): ContainerBuilder {
     ;
 
     $container->addCompilerPass(new ControllerLocatorPass());
+
+    if ($_ENV['APP_ENV'] === 'test') {
+        $container
+            ->autowire(DatabaseResetterInterface::class, DatabaseResetter::class)
+            ->setArgument('$initSqlFilePath', __DIR__ . '/../db.sql')
+            ->setArgument('$dbUrl', $_ENV['DATABASE_URL'])
+            ->setPublic(true);
+    }
 
     $container->compile();
 
