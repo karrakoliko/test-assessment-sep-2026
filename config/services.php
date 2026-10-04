@@ -2,6 +2,7 @@
 
 use App\App\Controller\CategoryController;
 use App\App\Controller\IndexController;
+use App\App\Controller\HomeController;
 use App\App\Service\CategoryManagement\Gateway\CategoryGateway;
 use App\Core\Di\ControllerLocatorPass;
 use App\Core\Persistence\Database\Resetter\DatabaseResetter;
@@ -43,7 +44,7 @@ return static function (): ContainerBuilder {
             new Route(
                 mask: '/',
                 controllerReference: new ControllerReference(
-                    class: IndexController::class,
+                    class: HomeController::class,
                     method: 'index'
                 )
             ),
@@ -77,7 +78,7 @@ return static function (): ContainerBuilder {
         ->setPublic(true);
 
     $container
-        ->autowire(IndexController::class)
+        ->autowire(HomeController::class)
         ->addTag('app.controller')
     ;
     $container
