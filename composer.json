@@ -27,6 +27,11 @@
     "require": {
         "smarty/smarty": "^5.8",
         "symfony/dependency-injection": "^8.1",
-        "symfony/dotenv": "^8.1"
+        "doctrine/dbal": "^4.5",
+        "symfony/dotenv": "^8.1",
+        "nyholm/psr7": "^1.8",
+        "nyholm/psr7-server": "^1.1",
+        "laminas/laminas-httphandlerrunner": "^2.14",
+        "php": "^8.5"
     }
 }
