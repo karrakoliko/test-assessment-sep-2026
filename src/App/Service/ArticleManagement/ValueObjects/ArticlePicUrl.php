@@ -15,7 +15,7 @@ class ArticlePicUrl implements
     {
 
         try {
-            $uri = ($picUrl instanceof Uri) ? $picUrl : new Uri($picUrl);
+            $uri = ($picUrl instanceof Uri) ? $picUrl : new Uri(trim($picUrl));
 
             if (strlen($uri->toString()) > self::MAX_LENGTH) {
                 throw new \InvalidArgumentException(
