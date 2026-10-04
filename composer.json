@@ -26,6 +26,7 @@
     },
     "require": {
         "smarty/smarty": "^5.8",
-        "symfony/dependency-injection": "^8.1"
+        "symfony/dependency-injection": "^8.1",
+        "symfony/dotenv": "^8.1"
     }
 }
