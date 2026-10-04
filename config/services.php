@@ -1,6 +1,8 @@
 <?php
 
+use App\App\Controller\CategoryController;
 use App\App\Controller\IndexController;
+use App\App\Service\CategoryManagement\Gateway\CategoryGateway;
 use App\Core\Di\ControllerLocatorPass;
 use App\Core\Persistence\Database\Resetter\DatabaseResetter;
 use App\Core\Persistence\Database\Resetter\DatabaseResetterInterface;
@@ -8,6 +10,8 @@ use App\Core\Router\ArgumentResolver\ArgumentResolver;
 use App\Core\Router\ArgumentResolver\ArgumentResolverInterface;
 use App\Core\Router\ControllerReference;
 use App\Core\Router\Router;
+use App\Core\Router\Route\Argument\RouteArgument;
+use App\Core\Router\Route\Argument\RouteArguments;
 use App\Core\Router\Route\Route;
 use App\Core\Router\RouterInterface;
 use Doctrine\DBAL\Connection;
@@ -43,6 +47,16 @@ return static function (): ContainerBuilder {
                     method: 'index'
                 )
             ),
+            new Route(
+                mask: '/category/{id}',
+                controllerReference: new ControllerReference(
+                    class: CategoryController::class,
+                    method: 'show'
+                ),
+                arguments: new RouteArguments(
+                    new RouteArgument('id', '/^\d+$/')
+                )
+            )
         ])
         ->setPublic(true)
     ;
@@ -67,6 +81,11 @@ return static function (): ContainerBuilder {
         ->addTag('app.controller')
     ;
     $container
+        ->autowire(CategoryController::class)
+        ->addTag('app.controller')
+    ;
+
+    $container
         ->register(
             'app.core.kernel.controller_locator',
             ServiceLocator::class,
@@ -76,6 +95,8 @@ return static function (): ContainerBuilder {
     ;
 
     $container->addCompilerPass(new ControllerLocatorPass());
+
+    $container->autowire(CategoryGateway::class);
 
     if ($_ENV['APP_ENV'] === 'test') {
         $container
