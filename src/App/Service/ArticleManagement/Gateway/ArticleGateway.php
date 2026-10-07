@@ -100,6 +100,7 @@ class ArticleGateway implements
     public function findLatestArticlesByCategory(
         int $n,
         Category $category,
+        int $offset = 0
     ): iterable {
         $n = max(
             1,
@@ -125,8 +126,10 @@ class ArticleGateway implements
                     WHERE a.category_id = :category_id
                     ORDER BY a.created_at DESC, a.id DESC
                     LIMIT %d
+                    OFFSET %d
                     SQL,
                 $n,
+                $offset
             ),
             [
                 'category_id' => $category->getId(),
