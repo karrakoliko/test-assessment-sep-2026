@@ -11,16 +11,20 @@ use App\Core\Persistence\Database\Resetter\DatabaseResetterInterface;
 use App\Core\Router\ArgumentResolver\ArgumentResolver;
 use App\Core\Router\ArgumentResolver\ArgumentResolverInterface;
 use App\Core\Router\ControllerReference;
+use App\Core\Router\Route\Collection\RouteCollection;
 use App\Core\Router\Router;
 use App\Core\Router\Route\Argument\RouteArgument;
 use App\Core\Router\Route\Argument\RouteArguments;
 use App\Core\Router\Route\Route;
 use App\Core\Router\RouterInterface;
+use App\Core\Router\UrlGenerator\UrlGenerator;
+use App\Core\Router\UrlGenerator\UrlGeneratorInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Tools\DsnParser;
 use Smarty\Smarty;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
 return static function (): ContainerBuilder {
@@ -37,17 +41,15 @@ return static function (): ContainerBuilder {
     ;
 
     $container
-        ->register(
-            RouterInterface::class,
-            Router::class
-        )
+        ->register(RouteCollection::class, RouteCollection::class)
         ->setArgument('$routes', [
             new Route(
                 mask: '/',
                 controllerReference: new ControllerReference(
                     class: HomeController::class,
                     method: 'index'
-                )
+                ),
+                name: 'home'
             ),
             new Route(
                 mask: '/category/{id}',
@@ -55,13 +57,24 @@ return static function (): ContainerBuilder {
                     class: CategoryController::class,
                     method: 'show'
                 ),
+                name: 'category__show',
                 arguments: new RouteArguments(
                     new RouteArgument('id', '/^\d+$/')
                 )
             )
-        ])
+        ]);
+
+    $container
+        ->register(
+            RouterInterface::class,
+            Router::class
+        )
+        ->setArgument('$routes', new Reference(RouteCollection::class))
         ->setPublic(true)
     ;
+
+    $container->autowire(UrlGenerator::class, UrlGenerator::class);
+    $container->setAlias(UrlGeneratorInterface::class, UrlGenerator::class);
 
     $container
         ->register(Connection::class)

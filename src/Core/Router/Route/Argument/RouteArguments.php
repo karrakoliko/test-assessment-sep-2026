@@ -20,7 +20,7 @@ final readonly class RouteArguments implements \IteratorAggregate, \Countable
     }
 
     /**
-     * @param array<string|int, string|RouteArgument> $arguments
+     * @param array<string|int, string|int|float|\Stringable|RouteArgument> $arguments
      */
     public static function fromArray(array $arguments): self
     {
@@ -28,8 +28,8 @@ final readonly class RouteArguments implements \IteratorAggregate, \Countable
         foreach ($arguments as $name => $arg) {
             if ($arg instanceof RouteArgument) {
                 $items[] = $arg;
-            } elseif (is_string($name) && is_string($arg)) {
-                $items[] = new RouteArgument($name, $arg);
+            } elseif (is_string($name) && (is_scalar($arg) || $arg instanceof \Stringable)) {
+                $items[] = new RouteArgument($name, (string) $arg);
             }
         }
         return new self(...$items);
@@ -61,6 +61,6 @@ final readonly class RouteArguments implements \IteratorAggregate, \Countable
 
     public function getIterator(): \Traversable
     {
-        return new \ArrayIterator($this->arguments);
+        return new \ArrayIterator((array)$this->arguments);
     }
 }

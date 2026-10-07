@@ -13,4 +13,5 @@ interface RouteInterface
     public function getControllerReference(): ControllerReferenceInterface;
     public function matches(ServerRequestInterface $request): bool;
     public function getArguments(): RouteArguments;
+    public function getName(): ?string;
 }

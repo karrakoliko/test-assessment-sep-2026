@@ -26,7 +26,7 @@ final class ArgumentResolver implements ArgumentResolverInterface
             return [];
         }
 
-        $regex = $this->routeCompiler->compile($mask, $route->getArguments());
+        $regex = $this->routeCompiler->compileToRegex($mask, $route->getArguments());
 
         if (preg_match($regex, '/' . trim($request->getUri()->getPath(), '/'), $matches)) {
             return array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);

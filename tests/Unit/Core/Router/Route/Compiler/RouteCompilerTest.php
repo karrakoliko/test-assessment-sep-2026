@@ -8,19 +8,63 @@ use App\Core\Router\Route\Compiler\RouteCompiler;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Uri\Rfc3986\Uri;
 
 class RouteCompilerTest extends TestCase
 {
     #[Test]
-    #[DataProvider('provideCompilationCases')]
-    public function compile(string $mask, RouteArguments|array $arguments, string $expectedRegex): void
+    #[DataProvider('provideRegexCompilationCases')]
+    public function compileToRegex(string $mask, RouteArguments|array $arguments, string $expectedRegex): void
     {
         $compiler = new RouteCompiler();
 
-        self::assertSame($expectedRegex, $compiler->compile($mask, $arguments));
+        self::assertSame($expectedRegex, $compiler->compileToRegex($mask, $arguments));
     }
 
-    public static function provideCompilationCases(): iterable
+    #[Test]
+    #[DataProvider('provideUrlCompilationCases')]
+    public function compileToUrl(string $mask, array $arguments, string $expectedUrl): void
+    {
+        $compiler = new RouteCompiler();
+
+        $uri = $compiler->compileToUrl($mask, $arguments);
+
+        self::assertInstanceOf(Uri::class, $uri);
+        self::assertSame($expectedUrl, $uri->toString());
+    }
+
+    #[Test]
+    public function compileToUrlThrowsExceptionWhenArgumentIsMissing(): void
+    {
+        $compiler = new RouteCompiler();
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageIs('Missing required argument "id" for route mask "/category/{id}".');
+
+        $compiler->compileToUrl('/category/{id}', []);
+    }
+
+    public static function provideUrlCompilationCases(): iterable
+    {
+        yield 'root slash' => ['/', [], '/'];
+        yield 'empty string' => ['', [], '/'];
+        yield 'static path with trailing slash' => ['posts/all/', [], '/posts/all'];
+        yield 'static path' => ['/posts/all', [], '/posts/all'];
+        yield 'single placeholder with leading slash' => ['/category/{id}', ['id' => 123], '/category/123'];
+        yield 'single placeholder without leading slash' => ['category/{id}', ['id' => 'abc'], '/category/abc'];
+        yield 'multiple placeholders' => [
+            '/posts/{year}/{month}/{slug}',
+            ['year' => 2026, 'month' => 10, 'slug' => 'hello-world'],
+            '/posts/2026/10/hello-world',
+        ];
+        yield 'adjacent placeholders and custom delimiters' => [
+            '/category/{slug}-{id}',
+            ['slug' => 'tech', 'id' => 42],
+            '/category/tech-42',
+        ];
+    }
+
+    public static function provideRegexCompilationCases(): iterable
     {
         yield 'root slash' => ['/', [], '#^/$#'];
         yield 'empty string' => ['', [], '#^/$#'];

@@ -2,15 +2,16 @@
 
 namespace App\Core\Router;
 
+use App\Core\Router\Route\Collection\RouteCollection;
 use App\Core\Router\Route\RouteInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Router implements RouterInterface
 {
     /**
-     * @param iterable<RouteInterface> $routes
+     * @param RouteCollection $routes
      */
-    public function __construct(protected iterable $routes)
+    public function __construct(protected readonly RouteCollection $routes)
     {
 
     }

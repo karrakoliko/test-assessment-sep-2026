@@ -16,11 +16,13 @@ class Route implements RouteInterface
     /**
      * @param string $mask "/article/{id}-{slug}"
      * @param ControllerReferenceInterface $controllerReference
+     * @param ?string $name
      * @param RouteArguments|array<string, string> $arguments
      */
     public function __construct(
         protected string $mask,
         protected ControllerReferenceInterface $controllerReference,
+        protected ?string $name = null,
         RouteArguments|array $arguments = new RouteArguments()
     ) {
         $this->arguments = is_array($arguments) ? RouteArguments::fromArray($arguments) : $arguments;
@@ -43,7 +45,7 @@ class Route implements RouteInterface
             return (bool) @preg_match($this->mask, $path);
         }
 
-        $regex = $this->routeCompiler->compile($this->mask, $this->arguments);
+        $regex = $this->routeCompiler->compileToRegex($this->mask, $this->arguments);
 
         return (bool) preg_match($regex, '/' . trim($path, '/'));
     }
@@ -56,5 +58,10 @@ class Route implements RouteInterface
     public function getMask(
     ): string {
         return $this->mask;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
     }
 }
