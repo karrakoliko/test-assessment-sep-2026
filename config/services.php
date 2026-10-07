@@ -120,6 +120,11 @@ return static function (): ContainerBuilder {
 
     if ($_ENV['APP_ENV'] !== 'prod') {
         $container
+            ->autowire(\App\App\Service\Seeder\ChunkedSeeder::class)
+            ->setArgument('$environment', $_ENV['APP_ENV'])
+            ->setPublic(true);
+
+        $container
             ->autowire(DatabaseResetterInterface::class, DatabaseResetter::class)
             ->setArgument('$initSqlFilePath', __DIR__ . '/../db.sql')
             ->setArgument('$dbUrl', $_ENV['DATABASE_URL'])

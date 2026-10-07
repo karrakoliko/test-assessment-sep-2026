@@ -8,7 +8,7 @@ require __DIR__ . '/../config/bootstrap.php';
 $sc = (require __DIR__ . '/../config/services.php')();
 
 /** @var \App\App\Service\Seeder\SeederInterface $seeder */
-$seeder = $sc->get(\App\App\Service\Seeder\Seeder::class);
+$seeder = $sc->get(\App\App\Service\Seeder\ChunkedSeeder::class);
 
 /** @var \Doctrine\DBAL\Connection $conn */
 $conn = $sc->get(\Doctrine\DBAL\Connection::class);
