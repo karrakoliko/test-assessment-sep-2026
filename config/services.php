@@ -118,7 +118,7 @@ return static function (): ContainerBuilder {
         HomePageService::class
     );
 
-    if ($_ENV['APP_ENV'] === 'test') {
+    if ($_ENV['APP_ENV'] !== 'prod') {
         $container
             ->autowire(DatabaseResetterInterface::class, DatabaseResetter::class)
             ->setArgument('$initSqlFilePath', __DIR__ . '/../db.sql')
