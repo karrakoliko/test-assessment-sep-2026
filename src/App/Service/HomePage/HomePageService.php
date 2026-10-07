@@ -5,13 +5,15 @@ namespace App\App\Service\HomePage;
 use App\App\Service\ArticleManagement\Gateway\ArticleGateway;
 use App\App\Service\CategoryManagement\Gateway\CategoryGateway;
 use App\App\Service\HomePage\Dto\HomePageCategoryDto;
+use App\Core\Router\UrlGenerator\UrlGeneratorInterface;
 use Doctrine\DBAL\Exception;
 
 class HomePageService
 {
     public function __construct(
         protected CategoryGateway $categoryGateway,
-        protected ArticleGateway $articleGateway
+        protected ArticleGateway $articleGateway,
+        protected UrlGeneratorInterface $urlGenerator
     ) {
     }
 
@@ -25,9 +27,18 @@ class HomePageService
 
         foreach ($categories as $category) {
 
-            $articles = $this->articleGateway->findLatestArticlesByCategory(3, $category);
+            $articlesLatest = $this->articleGateway->findLatestArticlesByCategory(3, $category);
 
-            yield new HomePageCategoryDto($category, $articles);
+            $linkToAllArticles = $this->urlGenerator->generate(
+                'category__show',
+                ['id' => $category->getId()]
+            );
+
+            yield new HomePageCategoryDto(
+                category: $category,
+                articlesLatest: $articlesLatest,
+                linkToAllArticles: $linkToAllArticles
+            );
         }
 
     }
