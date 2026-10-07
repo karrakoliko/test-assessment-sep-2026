@@ -5,6 +5,7 @@ namespace App\App\Service\Seeder;
 use App\App\Service\ArticleManagement\Gateway\ArticleGateway;
 use App\App\Service\CategoryManagement\Category;
 use App\App\Service\CategoryManagement\Gateway\CategoryGateway;
+use App\App\Service\Seeder\Profile\App\ArticleSeedProfile;
 use App\App\Service\Seeder\Profile\App\CategorySeedProfile;
 use App\App\Service\Seeder\Profile\SeedProfileInterface;
 
@@ -32,11 +33,17 @@ class ChunkedSeeder implements SeederInterface
 
     }
 
-    public function seedArticles(
-        int $n,
-        Category $category
+    public function seedArticlesAmongExistingCategoriesRandomly(
+        int $n
     ): void {
-        // TODO: Implement seedArticles() method.
+
+        $profile = new ArticleSeedProfile(
+            categories: $this->categoryGateway->findAll()
+        );
+
+        foreach ($this->generateChunks($n, $profile, $this->chunkSize) as $chunk) {
+            $this->articleGateway->insert(...$chunk);
+        }
     }
 
 
@@ -55,6 +62,19 @@ class ChunkedSeeder implements SeederInterface
 
         if ($chunk !== []) {
             yield $chunk;
+        }
+    }
+
+    public function seedArticlesToCategory(
+        int $n,
+        Category $category
+    ): void {
+        $profile = new ArticleSeedProfile(
+            categories: [$category]
+        );
+
+        foreach ($this->generateChunks($n, $profile, $this->chunkSize) as $chunk) {
+            $this->articleGateway->insert(...$chunk);
         }
     }
 }

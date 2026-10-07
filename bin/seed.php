@@ -14,5 +14,6 @@ $seeder = $sc->get(\App\App\Service\Seeder\ChunkedSeeder::class);
 $conn = $sc->get(\Doctrine\DBAL\Connection::class);
 
 $conn->transactional(function () use ($seeder) {
-    $seeder->seedCategories(10000);
+    $seeder->seedCategories(100);
+    $seeder->seedArticlesAmongExistingCategoriesRandomly(300);
 });

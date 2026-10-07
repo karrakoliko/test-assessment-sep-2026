@@ -23,6 +23,35 @@ class CategoryGateway implements
      * @return iterable<Category>
      * @throws Exception
      */
+    public function findAll(): iterable
+    {
+        $rows = $this->connection->iterateAssociative(
+            <<<'SQL'
+                SELECT
+                    c.id,
+                    c.title,
+                    c.description
+                FROM categories c
+                SQL,
+        );
+
+        foreach ($rows as $row) {
+            yield new Category(
+                title: new CategoryTitle(
+                    $row['title']
+                ),
+                description: new CategoryDescription(
+                    $row['description']
+                ),
+                id: (int)$row['id'],
+            );
+        }
+    }
+
+    /**
+     * @return iterable<Category>
+     * @throws Exception
+     */
     public function findOnesHavingAtLeastNArticles(int $n): iterable
     {
         if ($n < 1) {

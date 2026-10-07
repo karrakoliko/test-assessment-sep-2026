@@ -11,7 +11,7 @@ use Faker\Factory as FakerFactory;
 class CategorySeedProfile implements SeedProfileInterface
 {
     /**
-     * @param array $params
+     * @param array{title?: string, description?: string, id?: int} $params
      * @return Category
      */
     public function generate(array $params = []): Category
