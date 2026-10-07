@@ -1,8 +1,8 @@
 <?php
 
 use App\App\Controller\CategoryController;
-use App\App\Controller\IndexController;
 use App\App\Controller\HomeController;
+use App\App\Service\ArticleManagement\Gateway\ArticleGateway;
 use App\App\Service\CategoryManagement\Gateway\CategoryGateway;
 use App\Core\Di\ControllerLocatorPass;
 use App\Core\Persistence\Database\Resetter\DatabaseResetter;
@@ -98,6 +98,7 @@ return static function (): ContainerBuilder {
     $container->addCompilerPass(new ControllerLocatorPass());
 
     $container->autowire(CategoryGateway::class);
+    $container->autowire(ArticleGateway::class);
 
     if ($_ENV['APP_ENV'] === 'test') {
         $container
