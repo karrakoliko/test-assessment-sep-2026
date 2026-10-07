@@ -15,19 +15,22 @@ class Article
     private ArticleDescription $description;
     private Category $category;
     private ArticlePicUrl $picUrl;
+    private ?int $id;
 
     public function __construct(
         string $title,
         string $content,
         string $description,
         string $picUrl,
-        Category $category
+        Category $category,
+        ?int $id = null
     ) {
         $this->title = new ArticleTitle($title);
         $this->content = new ArticleContent($content);
         $this->description = new ArticleDescription($description);
         $this->picUrl = new ArticlePicUrl($picUrl);
         $this->category = $category;
+        $this->id = $id;
     }
 
     public function getTitle(): ArticleTitle
@@ -53,6 +56,16 @@ class Article
     public function getPicUrl(): ArticlePicUrl
     {
         return $this->picUrl;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
     }
 
 

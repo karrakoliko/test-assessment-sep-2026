@@ -9,14 +9,18 @@ class Category
 {
     private CategoryTitle $title;
     private CategoryDescription $description;
+    private ?int $id;
 
     public function __construct(
         string $title,
-        string $description
+        string $description,
+        ?int $id = null,
     ) {
         $this->title = new CategoryTitle(title: $title);
         $this->description = new CategoryDescription(description: $description);
+        $this->id = $id;
     }
+
 
     public function getTitle(): CategoryTitle
     {
@@ -26,6 +30,16 @@ class Category
     public function getDescription(): CategoryDescription
     {
         return $this->description;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId($id): void
+    {
+        $this->id = $id;
     }
 
 }
