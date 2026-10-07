@@ -4,6 +4,7 @@ use App\App\Controller\CategoryController;
 use App\App\Controller\HomeController;
 use App\App\Service\ArticleManagement\Gateway\ArticleGateway;
 use App\App\Service\CategoryManagement\Gateway\CategoryGateway;
+use App\App\Service\HomePage\HomePageService;
 use App\Core\Di\ControllerLocatorPass;
 use App\Core\Persistence\Database\Resetter\DatabaseResetter;
 use App\Core\Persistence\Database\Resetter\DatabaseResetterInterface;
@@ -99,6 +100,10 @@ return static function (): ContainerBuilder {
 
     $container->autowire(CategoryGateway::class);
     $container->autowire(ArticleGateway::class);
+
+    $container->autowire(
+        HomePageService::class
+    );
 
     if ($_ENV['APP_ENV'] === 'test') {
         $container
