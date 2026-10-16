@@ -17,6 +17,20 @@
             </a>
             <article class="article__desc">{$articleLatest->getDescription()->getValue()}</article>
         </div>
+    {foreachelse}
+        No items
     {/foreach}
+
+    {if $page > 1 || count($articlesLatest) === $paginationPerPage}
+    <div class="pagination">
+        {if $page > 1}
+            <a class="pagination__prev" href="{$urlGenerator->generate('category__show',['id'=>$category->getId()],['page'=>$page - 1])->toString()}">Prev</a>
+        {/if}
+        {if count($articlesLatest) === $paginationPerPage}
+            <a class="pagination__next" href="{$urlGenerator->generate('category__show',['id'=>$category->getId()],['page'=>$page + 1])->toString()}">Next</a>
+        {/if}
+    </div>
+    {/if}
+
 </div>
 {include file="partials/footer.tpl"}

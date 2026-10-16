@@ -14,6 +14,8 @@ use Smarty\Smarty;
 class CategoryController implements
     ControllerInterface
 {
+    public const int ARTICLES_PER_PAGE = 3;
+
     public function __construct(
         protected CategoryGateway $categoryGateway,
         protected ArticleGateway $articleGateway,
@@ -34,10 +36,17 @@ class CategoryController implements
                 throw new CategoryNotFoundException();
             }
 
-            $articles = $this->articleGateway->findLatestArticlesByCategory(
-                n: 10,
-                category: $category
-            );
+            // @todo: extract to Paginator service
+            $queryParams = $request->getQueryParams();
+            $page = max(1, (int)($queryParams['page'] ?? 1));
+            $limit = self::ARTICLES_PER_PAGE;
+            $offset = ($page - 1) * $limit;
+
+            $articles = iterator_to_array($this->articleGateway->findLatestArticlesByCategory(
+                n: $limit,
+                category: $category,
+                offset: $offset
+            ));
         } catch (CategoryNotFoundException $e) {
             return new Response(
                 status: 404,
@@ -55,6 +64,13 @@ class CategoryController implements
         $this->smarty->assign(
             'articlesLatest',
             $articles
+        );
+
+        $this->smarty->assign('paginationPerPage', self::ARTICLES_PER_PAGE);
+
+        $this->smarty->assign(
+            'page',
+            $page
         );
 
         $this->smarty->assign('urlGenerator', $this->urlGenerator);

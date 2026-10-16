@@ -39,6 +39,9 @@ img {
 #category-page {
   display: block;
 }
+#category-page .pagination {
+  margin: 0 auto;
+}
 #category-page .category__description {
   background: #ccc;
   padding: 2em;
@@ -75,6 +78,13 @@ img {
 #page__header {
   width: 100%;
 }
+#page__header>a {
+  color: #000;
+}
+#page__header>a:visited,
+#page__header>a:hover {
+  color: #000;
+}
 #page__footer {
   background: #fafafa;
   padding-top: 2em;
@@ -107,6 +117,20 @@ img {
 #page__footer .signature .signature__pic,
 #page__footer .signature .signature__pic img {
   width: 100px;
+}
+.pagination {
+  background: #302e2e;
+  padding: 1em;
+  font-size: 1em;
+  color: #fff;
+  display: flex;
+  justify-content: space-around;
+  border-radius: 1em;
+  max-width: 10em;
+}
+.pagination .pagination__prev,
+.pagination .pagination__next {
+  color: #fff;
 }
 @media (max-width: 600px) {
   body {
