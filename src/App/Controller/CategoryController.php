@@ -45,6 +45,8 @@ class CategoryController implements
             );
         }
 
+        $this->smarty->assign('pageTitle', $category->getTitle()->getValue());
+
         $this->smarty->assign(
             'category',
             $category

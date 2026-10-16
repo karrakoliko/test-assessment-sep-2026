@@ -36,6 +36,8 @@ class ArticleController implements
             );
         }
 
+        $this->smarty->assign('pageTitle', $article->getTitle()->getValue());
+
         $this->smarty->assign(
             'article',
             $article
