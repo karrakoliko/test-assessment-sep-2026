@@ -99,4 +99,21 @@ class UrlGeneratorTest extends TestCase
 
         $generator->generate('category_show', []);
     }
+
+    #[Test]
+    public function generateReturnsUriWithQueryParams(): void
+    {
+        $route = new Route(
+            mask: '/category/{id}',
+            controllerReference: $this->createStub(ControllerReferenceInterface::class),
+            name: 'category_show'
+        );
+        $routes = new RouteCollection([$route]);
+        $generator = new UrlGenerator($routes);
+
+        $uri = $generator->generate('category_show', ['id' => 42], ['sort' => 'desc', 'page' => 2]);
+
+        self::assertInstanceOf(Uri::class, $uri);
+        self::assertSame('/category/42?sort=desc&page=2', $uri->toString());
+    }
 }
