@@ -16,8 +16,11 @@ generate-certs:
 down:
 	docker compose down --remove-orphans
 
-db-seed:
+seed:
 	docker compose run --rm php php bin/seed.php
 
-db-clear:
+db-reset:
 	docker compose run --rm php php bin/dbreset.php
+
+test:
+	docker compose run --rm php vendor/bin/phpunit
