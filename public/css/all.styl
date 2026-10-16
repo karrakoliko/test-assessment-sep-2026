@@ -1,0 +1,130 @@
+*
+  box-sizing border-box
+
+body
+  font-size 1.25em
+  margin 0 auto
+  max-width 76ch
+  padding 0 1rem
+
+img
+  max-width 100%
+  height auto
+
+#home-page
+
+  .article
+    display flex
+    flex-flow row nowrap
+    font-size 1em
+    margin-bottom 1.25em
+
+    .article__link + .article__title
+      margin-left 1ch
+
+  .category__title
+    font-weight 700
+    font-size 1.5em
+
+  .category__line
+    display flex
+    flex-flow row nowrap
+
+  .category__btn-all-articles
+    text-decoration underline
+    font-weight 700
+    margin-top .5ch
+
+  .category__btn-all-articles + .category__title
+    margin-left 1ch
+
+#category-page
+  display block
+
+  .category__description
+    background #ccc
+    padding 2em
+    margin 0
+
+  .article
+    margin 1em 0
+
+  .article__title
+    font-weight 600
+
+  .article__link + .article__title
+    margin-left 1ch
+
+  .article__line
+    display flex
+    flex-flow row nowrap
+
+  .article__pic
+    margin 1em auto
+    max-height 16em
+
+#article-page
+
+  .article__pic
+    margin 1em auto
+
+  .article__description
+    background #ccc
+    padding 2em
+    margin 0
+
+  .article__content
+    margin 1em 0
+
+#page__header
+  width 100%
+
+#page__footer
+  background #fafafa
+  padding-top 2em
+  margin-top 1em
+  border #cbcbcb 1px dotted
+
+  .signature
+    display flex
+    flex-flow column wrap
+    align-items center
+    font-size .8em
+
+    .signature__author
+      margin 0 auto
+
+    .signature__link
+      text-decoration underline
+
+    .signature__contacts
+      display flex
+      flex-flow row nowrap
+      margin .25em
+
+    .signature__contacts .signature__link + .signature__link
+      margin-left 1ch
+
+    .signature__pic
+      margin 1em
+
+    .signature__pic, .signature__pic img
+      width 100px
+
+
+@media (max-width: 600px)
+  body
+    font-size 1em
+    padding 0 .75rem
+
+  #category-page
+    .category__description
+      padding 1rem
+
+  #article-page
+    .article__description
+      padding 1rem
+
+  #page__footer
+    .signature__contacts
+      justify-content center
