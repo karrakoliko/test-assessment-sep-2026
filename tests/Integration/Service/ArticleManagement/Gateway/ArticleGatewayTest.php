@@ -79,4 +79,47 @@ class ArticleGatewayTest extends TestCaseIntegration
 
     }
 
+    #[Test]
+    public function findById()
+    {
+        /** @var Connection $conn */
+        $conn = self::$container->get(Connection::class);
+
+        $categoryGateway = new CategoryGateway(connection: $conn);
+        $articleGateway = new ArticleGateway(connection: $conn);
+
+        $category = new Category(
+            title: new CategoryTitle(title: 'cat_test'),
+            description: new CategoryDescription(description: 'desc_test'),
+        );
+
+        $article = new Article(
+            title: 'article_title',
+            content: 'article_content',
+            description: 'article_desc',
+            picUrl: 'https://example.com/pic.jpg',
+            category: $category
+        );
+
+        $conn->transactional(function () use ($categoryGateway, $articleGateway, $category, $article) {
+            $categoryGateway->insert($category);
+            $articleGateway->insert($article);
+        });
+
+        $found = $articleGateway->findById($article->getId());
+
+        self::assertNotNull($found);
+        self::assertSame($article->getId(), $found->getId());
+        self::assertSame('article_title', $found->getTitle()->getValue());
+        self::assertSame('article_content', $found->getContent()->getValue());
+        self::assertSame('article_desc', $found->getDescription()->getValue());
+        self::assertSame('https://example.com/pic.jpg', $found->getPicUrl()->toString());
+        self::assertNotNull($found->getCategory());
+        self::assertSame($category->getId(), $found->getCategory()->getId());
+        self::assertSame('cat_test', $found->getCategory()->getTitle()->getValue());
+        self::assertSame('desc_test', $found->getCategory()->getDescription()->getValue());
+
+        $notFound = $articleGateway->findById(999999);
+        self::assertNull($notFound);
+    }
 }

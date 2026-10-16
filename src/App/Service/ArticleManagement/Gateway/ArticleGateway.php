@@ -149,4 +149,53 @@ class ArticleGateway implements
             );
         }
     }
+
+    /**
+     * @throws Exception
+     */
+    public function findById(int $id): ?Article
+    {
+        $row = $this->connection->fetchAssociative(
+            <<<'SQL'
+                SELECT
+                    a.id          AS article_id,
+                    a.title       AS article_title,
+                    a.content     AS article_content,
+                    a.description AS article_description,
+                    a.pic_url     AS article_pic_url,
+                    c.id          AS category_id,
+                    c.title       AS category_title,
+                    c.description AS category_description
+                FROM articles a
+                INNER JOIN categories c ON c.id = a.category_id
+                WHERE a.id = :id
+                LIMIT 1
+                SQL,
+            [
+                'id' => $id,
+            ],
+            [
+                'id' => ParameterType::INTEGER,
+            ]
+        );
+
+        if ($row === false) {
+            return null;
+        }
+
+        $category = new Category(
+            title: $row['category_title'],
+            description: $row['category_description'],
+            id: (int)$row['category_id'],
+        );
+
+        return new Article(
+            title: $row['article_title'],
+            content: $row['article_content'],
+            description: $row['article_description'],
+            picUrl: $row['article_pic_url'],
+            category: $category,
+            id: (int)$row['article_id'],
+        );
+    }
 }

@@ -5,6 +5,7 @@ namespace App\App\Controller;
 use App\App\Service\ArticleManagement\Gateway\ArticleGateway;
 use App\App\Service\CategoryManagement\Exception\CategoryNotFoundException;
 use App\App\Service\CategoryManagement\Gateway\CategoryGateway;
+use App\Core\Router\UrlGenerator\UrlGeneratorInterface;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -16,7 +17,8 @@ class CategoryController implements
     public function __construct(
         protected CategoryGateway $categoryGateway,
         protected ArticleGateway $articleGateway,
-        protected Smarty $smarty
+        protected Smarty $smarty,
+        protected UrlGeneratorInterface $urlGenerator
     ) {
     }
 
@@ -52,6 +54,8 @@ class CategoryController implements
             'articlesLatest',
             $articles
         );
+
+        $this->smarty->assign('urlGenerator', $this->urlGenerator);
 
         $content = $this->smarty->fetch(
             'category.tpl'

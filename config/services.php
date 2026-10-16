@@ -1,5 +1,6 @@
 <?php
 
+use App\App\Controller\ArticleController;
 use App\App\Controller\CategoryController;
 use App\App\Controller\HomeController;
 use App\App\Service\ArticleManagement\Gateway\ArticleGateway;
@@ -61,6 +62,17 @@ return static function (): ContainerBuilder {
                 arguments: new RouteArguments(
                     new RouteArgument('id', '/^\d+$/')
                 )
+            ),
+            new Route(
+                mask: '/article/{id}',
+                controllerReference: new ControllerReference(
+                    class: ArticleController::class,
+                    method: 'show'
+                ),
+                name: 'article__show',
+                arguments: new RouteArguments(
+                    new RouteArgument('id', '/^\d+$/')
+                )
             )
         ]);
 
@@ -97,6 +109,10 @@ return static function (): ContainerBuilder {
     ;
     $container
         ->autowire(CategoryController::class)
+        ->addTag('app.controller')
+    ;
+    $container
+        ->autowire(ArticleController::class)
         ->addTag('app.controller')
     ;
 

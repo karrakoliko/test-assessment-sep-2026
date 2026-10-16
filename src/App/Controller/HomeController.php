@@ -3,6 +3,7 @@
 namespace App\App\Controller;
 
 use App\App\Service\HomePage\HomePageService;
+use App\Core\Router\UrlGenerator\UrlGeneratorInterface;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -12,7 +13,8 @@ class HomeController implements ControllerInterface
 {
     public function __construct(
         protected Smarty $smarty,
-        protected HomePageService $homePageService
+        protected HomePageService $homePageService,
+        protected UrlGeneratorInterface $urlGenerator
     ) {
 
     }
@@ -20,7 +22,7 @@ class HomeController implements ControllerInterface
     public function index(RequestInterface $request): ResponseInterface
     {
         $this->smarty->assign('homePageCategories', $this->homePageService->getHomePageCategories());
-
+        $this->smarty->assign('urlGenerator', $this->urlGenerator);
         return new Response(
             body: $this->smarty->fetch('home.tpl')
         );

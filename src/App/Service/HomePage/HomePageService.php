@@ -29,15 +29,9 @@ class HomePageService
 
             $articlesLatest = $this->articleGateway->findLatestArticlesByCategory(3, $category);
 
-            $linkToAllArticles = $this->urlGenerator->generate(
-                'category__show',
-                ['id' => $category->getId()]
-            );
-
             yield new HomePageCategoryDto(
                 category: $category,
                 articlesLatest: $articlesLatest,
-                linkToAllArticles: $linkToAllArticles
             );
         }
 
