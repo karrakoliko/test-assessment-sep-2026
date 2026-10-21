@@ -80,7 +80,7 @@ class RouteCompilerTest extends TestCase
         yield 'adjacent placeholders and custom delimiters' => [
             '/category/{slug}-{id}',
             [],
-            '#^/category/(?P<slug>[^/]+)-(?P<id>[^/]+)$#',
+            '#^/category/(?P<slug>[^/]+)\-(?P<id>[^/]+)$#',
         ];
         yield 'custom constraints with slash delimiters as array' => [
             '/category/{slug}-{id}',
@@ -88,7 +88,7 @@ class RouteCompilerTest extends TestCase
                 'slug' => '/[a-z0-9-]+/',
                 'id' => '/^\d+$/',
             ],
-            '#^/category/(?P<slug>[a-z0-9-]+)-(?P<id>\d+)$#',
+            '#^/category/(?P<slug>[a-z0-9-]+)\-(?P<id>\d+)$#',
         ];
         yield 'custom constraints with RouteArguments VO' => [
             '/category/{slug}-{id}',
@@ -96,7 +96,7 @@ class RouteCompilerTest extends TestCase
                 new RouteArgument('slug', '/[a-z0-9-]+/'),
                 new RouteArgument('id', '/^\d+$/'),
             ),
-            '#^/category/(?P<slug>[a-z0-9-]+)-(?P<id>\d+)$#',
+            '#^/category/(?P<slug>[a-z0-9-]+)\-(?P<id>\d+)$#',
         ];
         yield 'custom constraints with hash delimiters' => [
             '/items/{id}',
@@ -122,6 +122,17 @@ class RouteCompilerTest extends TestCase
             '/archive/{code}',
             new RouteArguments(new RouteArgument('code', '[a-z]{2,5}')),
             '#^/archive/(?P<code>[a-z]{2,5})$#',
+        ];
+        yield 'static dot is treated literally' => [
+            '/file/{name}.json',
+            [],
+            '#^/file/(?P<name>[^/]+)\.json$#',
+        ];
+
+        yield 'regex metacharacters in static path are escaped' => [
+            '/v1.0/files/{id}+',
+            [],
+            '#^/v1\.0/files/(?P<id>[^/]+)\+$#',
         ];
     }
 }

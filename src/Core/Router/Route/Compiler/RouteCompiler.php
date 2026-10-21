@@ -14,24 +14,39 @@ class RouteCompiler implements RouteCompilerInterface
      *
      * @param RouteArguments|array<string, string> $arguments
      */
-    public function compileToRegex(string $mask, RouteArguments|array $arguments = new RouteArguments()): string
-    {
+    public function compileToRegex(
+        string $mask,
+        RouteArguments|array $arguments = new RouteArguments(),
+    ): string {
         if (is_array($arguments)) {
             $arguments = RouteArguments::fromArray($arguments);
         }
 
         $normalizedMask = '/' . trim($mask, '/');
+        $parts = preg_split(
+            '/(\{[a-zA-Z0-9_]+\})/',
+            $normalizedMask,
+            -1,
+            PREG_SPLIT_DELIM_CAPTURE,
+        );
 
-        $pattern = preg_replace_callback('/\{([a-zA-Z0-9_]+)\}/', function (array $matches) use ($arguments): string {
-            $name = $matches[1];
-            $rule = $arguments->get($name)?->getPattern() ?? '[^/]+';
+        $pattern = '';
 
-            if (!preg_match('/[+*?]|{\d+,?\d*}$/', $rule)) {
-                $rule = "(?:$rule)+";
+        foreach ($parts as $part) {
+            if (preg_match('/^\{([a-zA-Z0-9_]+)\}$/D', $part, $matches)) {
+                $name = $matches[1];
+                $rule = $arguments->get($name)?->getPattern() ?? '[^/]+';
+
+                if (!preg_match('/[+*?]|{\d+,?\d*}$/', $rule)) {
+                    $rule = "(?:$rule)+";
+                }
+
+                $pattern .= "(?P<$name>$rule)";
+                continue;
             }
 
-            return "(?P<$name>$rule)";
-        }, $normalizedMask);
+            $pattern .= preg_quote($part, '#');
+        }
 
         return '#^' . $pattern . '$#';
     }
