@@ -9,7 +9,7 @@ class CategoryDescription implements \Stringable
 
     public function __construct(string $description)
     {
-        $this->description = trim($description);
+        $description = trim($description);
 
         if (strlen($description) > self::MAX_LENGTH) {
             throw new \InvalidArgumentException('Category description is too long');
