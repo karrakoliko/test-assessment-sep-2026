@@ -57,7 +57,7 @@ class HttpKernel implements
             );
         } catch (\Throwable $e) {
 
-            if ($_ENV['APP_ENV'] === 'prod') {
+            if ($this->environment === 'prod') {
 
                 $statusCode = $e instanceof HttpStatusCodeException ? $e->getStatusCode() : 500;
 
