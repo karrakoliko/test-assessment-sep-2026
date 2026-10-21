@@ -2,6 +2,7 @@
 
 namespace App\Core\Kernel\Http;
 
+use App\Core\Kernel\Http\Exception\HttpStatusCodeException;
 use App\Core\Router\ArgumentResolver\ArgumentResolver;
 use App\Core\Router\RouterInterface;
 use Nyholm\Psr7\Response;
@@ -27,10 +28,12 @@ class HttpKernel implements
         $route = $this->router->match(
             $request
         );
+
         try {
             if ($route === null) {
-                throw new \InvalidArgumentException(
-                    'No route matches the given URL'
+                throw new HttpStatusCodeException(
+                    statusCode: 404,
+                    message: 'No route matches the given URL'
                 );
             }
 
@@ -49,16 +52,20 @@ class HttpKernel implements
                 $arguments
             );
 
-
             $response = $controller->$controllerMethod(
                 $request
             );
         } catch (\Throwable $e) {
 
             if ($_ENV['APP_ENV'] === 'prod') {
+
+                $statusCode = $e instanceof HttpStatusCodeException ? $e->getStatusCode() : 500;
+
+                $message = $statusCode === 404 ? 'Page not found' : ($e instanceof HttpStatusCodeException ? $e->getMessage() : 'Internal Server Error');
+
                 return new Response(
-                    status: 500,
-                    body: 'Internal Server Error'
+                    status: $statusCode,
+                    body: $message
                 );
             } else {
                 // @todo: log, handle properly
