@@ -4,6 +4,7 @@ namespace App\Core\Router\Route;
 
 use App\Core\Router\ControllerReferenceInterface;
 use App\Core\Router\Route\Argument\RouteArguments;
+use App\Core\Router\Route\Method\HttpMethodCollection;
 use Psr\Http\Message\ServerRequestInterface;
 
 interface RouteInterface
@@ -14,4 +15,6 @@ interface RouteInterface
     public function matches(ServerRequestInterface $request): bool;
     public function getArguments(): RouteArguments;
     public function getName(): ?string;
+
+    public function getMethods(): HttpMethodCollection;
 }

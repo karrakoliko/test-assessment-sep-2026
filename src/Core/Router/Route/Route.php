@@ -6,6 +6,8 @@ use App\Core\Router\ControllerReferenceInterface;
 use App\Core\Router\Route\Argument\RouteArguments;
 use App\Core\Router\Route\Compiler\RouteCompiler;
 use App\Core\Router\Route\Compiler\RouteCompilerInterface;
+use App\Core\Router\Route\Method\HttpMethodCollection;
+use App\Core\Router\Route\Method\HttpMethodEnum;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Route implements RouteInterface
@@ -16,12 +18,14 @@ class Route implements RouteInterface
     /**
      * @param string $mask "/article/{id}-{slug}"
      * @param ControllerReferenceInterface $controllerReference
+     * @param HttpMethodCollection $methods
      * @param ?string $name
      * @param RouteArguments|array<string, string> $arguments
      */
     public function __construct(
         protected string $mask,
         protected ControllerReferenceInterface $controllerReference,
+        protected HttpMethodCollection $methods = new HttpMethodCollection([HttpMethodEnum::GET]),
         protected ?string $name = null,
         RouteArguments|array $arguments = new RouteArguments()
     ) {
@@ -39,6 +43,10 @@ class Route implements RouteInterface
      */
     public function matches(ServerRequestInterface $request): bool
     {
+        if (!$this->getMethods()->has(HttpMethodEnum::tryFrom($request->getMethod()))) {
+            return false;
+        }
+
         $path = $request->getUri()->getPath();
 
         if (str_starts_with($this->mask, '/^') || str_starts_with($this->mask, '#^') || str_starts_with($this->mask, '~^')) {
@@ -55,13 +63,18 @@ class Route implements RouteInterface
         return $this->arguments;
     }
 
-    public function getMask(
-    ): string {
+    public function getMask(): string
+    {
         return $this->mask;
     }
 
     public function getName(): ?string
     {
         return $this->name;
+    }
+
+    public function getMethods(): HttpMethodCollection
+    {
+        return $this->methods;
     }
 }

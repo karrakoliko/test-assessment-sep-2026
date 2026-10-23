@@ -5,6 +5,8 @@ namespace Tests\Unit\Core\Router\Route;
 use App\Core\Router\ControllerReferenceInterface;
 use App\Core\Router\Route\Argument\RouteArgument;
 use App\Core\Router\Route\Argument\RouteArguments;
+use App\Core\Router\Route\Method\HttpMethodCollection;
+use App\Core\Router\Route\Method\HttpMethodEnum;
 use App\Core\Router\Route\Route;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -15,11 +17,12 @@ class RouteTest extends TestCase
 {
     #[Test]
     #[DataProvider('provideMatchingCases')]
-    public function matchesRequest(string $mask, RouteArguments|array $arguments, string $path, bool $expected): void
+    public function matchesRequest(string $mask, RouteArguments|array $arguments, string $path, bool $expected, HttpMethodCollection $methods = new HttpMethodCollection([HttpMethodEnum::GET])): void
     {
         $route = new Route(
             mask: $mask,
             controllerReference: $this->createStub(ControllerReferenceInterface::class),
+            methods: $methods,
             arguments: $arguments
         );
 
@@ -29,6 +32,7 @@ class RouteTest extends TestCase
 
     public static function provideMatchingCases(): iterable
     {
+        yield 'http method mismatch' => ['/category', [], '/category', false, new HttpMethodCollection([HttpMethodEnum::POST])];
         yield 'regex route match' => ['/^\/a\/b\/[0-9]$/', [], '/a/b/1', true];
         yield 'root path match' => ['/', [], '/', true];
         yield 'root path mismatch' => ['/', [], '/category/1', false];
