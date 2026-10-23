@@ -13,7 +13,15 @@ $seeder = $sc->get(\App\App\Service\Seeder\ChunkedSeeder::class);
 /** @var \Doctrine\DBAL\Connection $conn */
 $conn = $sc->get(\Doctrine\DBAL\Connection::class);
 
-$conn->transactional(function () use ($seeder) {
-    $seeder->seedCategories(100);
-    $seeder->seedArticlesAmongExistingCategoriesRandomly(300);
-});
+$bufferingValueBeforeSeeding = $conn->getNativeConnection()->getAttribute(Pdo\Mysql::ATTR_USE_BUFFERED_QUERY);
+$conn->getNativeConnection()->setAttribute(Pdo\Mysql::ATTR_USE_BUFFERED_QUERY, false);
+
+try {
+    $conn->transactional(function () use ($seeder) {
+        $seeder->seedCategories(100);
+        $seeder->seedArticlesAmongExistingCategoriesRandomly(300);
+    });
+
+} finally {
+    $conn->getNativeConnection()->setAttribute(Pdo\Mysql::ATTR_USE_BUFFERED_QUERY, true);
+}

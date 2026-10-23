@@ -19,6 +19,17 @@ class CategoryGateway implements
     ) {
     }
 
+    public function count(): int
+    {
+        return (int)$this->connection->fetchOne(
+            <<<'SQL'
+                SELECT
+                    COUNT(id)
+                FROM categories
+                SQL,
+        );
+    }
+
     /**
      * @return iterable<Category>
      * @throws Exception

@@ -106,4 +106,30 @@ class CategoryGatewayTest extends TestCaseIntegration
 
     }
 
+    #[Test]
+    public function countReturnsTotalNumberOfCategories(): void
+    {
+        /** @var Connection $conn */
+        $conn = self::$container->get(Connection::class);
+
+        $gw = new CategoryGateway(connection: $conn);
+
+        self::assertSame(0, $gw->count());
+
+        $c1 = new Category(
+            title: new CategoryTitle(title: 'category1'),
+            description: new CategoryDescription(description: 'desc1'),
+        );
+
+        $c2 = new Category(
+            title: new CategoryTitle(title: 'category2'),
+            description: new CategoryDescription(description: 'desc2'),
+        );
+
+        $conn->transactional(function () use ($gw, $c1, $c2) {
+            $gw->insert($c1, $c2);
+        });
+
+        self::assertSame(2, $gw->count());
+    }
 }

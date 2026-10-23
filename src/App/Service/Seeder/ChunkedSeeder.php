@@ -38,7 +38,8 @@ class ChunkedSeeder implements SeederInterface
     ): void {
 
         $profile = new ArticleSeedProfile(
-            categories: $this->categoryGateway->findAll()
+            categories: $this->categoryGateway->findAll(),
+            reservoirSize: min($this->categoryGateway->count(), $this->chunkSize),
         );
 
         foreach ($this->generateChunks($n, $profile, $this->chunkSize) as $chunk) {
