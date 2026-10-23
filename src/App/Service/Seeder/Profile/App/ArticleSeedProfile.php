@@ -16,6 +16,7 @@ class ArticleSeedProfile implements SeedProfileInterface
 {
     /** @var iterable<Category> */
     protected array $categoriesReservoir = [];
+    protected \Faker\Generator $faker;
 
     /**
      * @param iterable<Category> $categories Categories to allocate articles to
@@ -33,6 +34,8 @@ class ArticleSeedProfile implements SeedProfileInterface
         }
 
         $this->fillCategoriesReservoir($categories);
+        $this->faker = FakerFactory::create();
+
     }
     /**
      * @param array{
@@ -46,14 +49,13 @@ class ArticleSeedProfile implements SeedProfileInterface
      */
     public function generate(array $params = []): Article
     {
-        $faker = FakerFactory::create();
 
         return new Article(
-            title: $params['title'] ?? $faker->text(min(255, ArticleTitle::MAX_LENGTH)),
-            content: $params['content'] ?? $faker->text(min(2048, ArticleContent::MAX_LENGTH)),
-            description: $params['description'] ?? $faker->text(min(255, ArticleDescription::MAX_LENGTH)),
+            title: $params['title'] ?? $this->faker->text(min(255, ArticleTitle::MAX_LENGTH)),
+            content: $params['content'] ?? $this->faker->text(min(2048, ArticleContent::MAX_LENGTH)),
+            description: $params['description'] ?? $this->faker->text(min(255, ArticleDescription::MAX_LENGTH)),
             picUrl: $params['picUrl'] ?? sprintf('https://placehold.co/%dx%d', 600, 400),
-            category: $params['category'] ?? $faker->randomElement($this->categoriesReservoir),
+            category: $params['category'] ?? $this->faker->randomElement($this->categoriesReservoir),
             id: $params['id'] ?? null,
         );
     }

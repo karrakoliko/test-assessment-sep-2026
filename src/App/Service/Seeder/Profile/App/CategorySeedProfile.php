@@ -10,17 +10,22 @@ use Faker\Factory as FakerFactory;
 
 class CategorySeedProfile implements SeedProfileInterface
 {
+    protected \Faker\Generator $faker;
+
+    public function __construct()
+    {
+
+        $this->faker = FakerFactory::create();
+    }
     /**
      * @param array{title?: string, description?: string, id?: int} $params
      * @return Category
      */
     public function generate(array $params = []): Category
     {
-        $faker = FakerFactory::create();
-
         return new Category(
-            title: $params['title'] ?? $faker->text(CategoryTitle::MAX_LENGTH),
-            description: $params['description'] ?? $faker->text(min(1024, CategoryDescription::MAX_LENGTH)),
+            title: $params['title'] ?? $this->faker->text(CategoryTitle::MAX_LENGTH),
+            description: $params['description'] ?? $this->faker->text(min(1024, CategoryDescription::MAX_LENGTH)),
             id: $params['id'] ?? null,
         );
 
