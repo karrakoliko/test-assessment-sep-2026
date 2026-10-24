@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Service\ArticleManagement\ValueObjects;
+namespace Tests\Unit\App\Service\ArticleManagement\ValueObjects;
 
 use App\App\Service\ArticleManagement\ValueObjects\ArticlePicUrl;
 use PHPUnit\Framework\Attributes\Test;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Integration\Service\ArticleManagement\Gateway;
+namespace Integration\App\Service\ArticleManagement\Gateway;
 
 use App\App\Service\ArticleManagement\Article;
 use App\App\Service\ArticleManagement\Gateway\ArticleGateway;

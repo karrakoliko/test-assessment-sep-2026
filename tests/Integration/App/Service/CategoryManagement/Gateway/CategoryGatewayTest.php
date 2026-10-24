@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Integration\Service\CategoryManagement\Gateway;
+namespace Tests\Integration\App\Service\CategoryManagement\Gateway;
 
 use App\App\Service\ArticleManagement\Article;
 use App\App\Service\ArticleManagement\Gateway\ArticleGateway;

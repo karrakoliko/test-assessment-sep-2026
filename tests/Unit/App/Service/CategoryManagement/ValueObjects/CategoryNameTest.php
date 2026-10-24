@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Service\CategoryManagement\ValueObjects;
+namespace Tests\Unit\App\Service\CategoryManagement\ValueObjects;
 
 use App\App\Service\CategoryManagement\ValueObjects\CategoryTitle;
 use PHPUnit\Framework\Attributes\Test;
