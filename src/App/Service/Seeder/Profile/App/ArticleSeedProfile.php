@@ -8,7 +8,6 @@ use App\App\Service\ArticleManagement\ValueObjects\ArticleDescription;
 use App\App\Service\ArticleManagement\ValueObjects\ArticleTitle;
 use App\App\Service\CategoryManagement\Category;
 use App\App\Service\Seeder\Profile\SeedProfileInterface;
-use Faker\Factory as FakerFactory;
 use InvalidArgumentException;
 use Random\RandomException;
 
@@ -16,7 +15,6 @@ class ArticleSeedProfile implements SeedProfileInterface
 {
     /** @var iterable<Category> */
     protected array $categoriesReservoir = [];
-    protected \Faker\Generator $faker;
 
     /**
      * @param iterable<Category> $categories Categories to allocate articles to
@@ -25,6 +23,7 @@ class ArticleSeedProfile implements SeedProfileInterface
      */
     public function __construct(
         iterable $categories,
+        protected \Faker\Generator $faker,
         protected int $reservoirSize = 10,
     ) {
         if ($reservoirSize < 1) {
@@ -34,8 +33,6 @@ class ArticleSeedProfile implements SeedProfileInterface
         }
 
         $this->fillCategoriesReservoir($categories);
-        $this->faker = FakerFactory::create();
-
     }
     /**
      * @param array{

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\App\Service\Seeder\DataGenerator\Profile\App;
+namespace Tests\Unit\App\Service\Seeder\Profile\App;
 
 use App\App\Service\CategoryManagement\Category;
 use App\App\Service\Seeder\Profile\App\CategorySeedProfile;
@@ -12,7 +12,7 @@ class CategorySeedProfileTest extends TestCaseUnit
     #[Test]
     public function generateReturnsCategoryWithFakerValues(): void
     {
-        $profile = new CategorySeedProfile();
+        $profile = new CategorySeedProfile(faker: \Faker\Factory::create());
         $category = $profile->generate();
 
         self::assertInstanceOf(Category::class, $category);
@@ -24,7 +24,7 @@ class CategorySeedProfileTest extends TestCaseUnit
     #[Test]
     public function generateUsesCustomParametersWhenProvided(): void
     {
-        $profile = new CategorySeedProfile();
+        $profile = new CategorySeedProfile(faker: \Faker\Factory::create());
         $category = $profile->generate([
             'title' => 'Custom Category',
             'description' => 'Custom Description',

@@ -14,6 +14,7 @@ class ChunkedSeeder implements SeederInterface
     public function __construct(
         protected CategoryGateway $categoryGateway,
         protected ArticleGateway $articleGateway,
+        protected \Faker\Generator $faker,
         string $environment,
         public readonly int $chunkSize = 100
     ) {
@@ -25,7 +26,9 @@ class ChunkedSeeder implements SeederInterface
     public function seedCategories(int $n): void
     {
 
-        $profile = new CategorySeedProfile();
+        $profile = new CategorySeedProfile(
+            faker: $this->faker,
+        );
 
         foreach ($this->generateChunks($n, $profile, $this->chunkSize) as $chunk) {
             $this->categoryGateway->insert(...$chunk);
@@ -39,6 +42,7 @@ class ChunkedSeeder implements SeederInterface
 
         $profile = new ArticleSeedProfile(
             categories: $this->categoryGateway->findAll(),
+            faker: $this->faker,
             reservoirSize: min($this->categoryGateway->count(), $this->chunkSize),
         );
 
@@ -71,7 +75,8 @@ class ChunkedSeeder implements SeederInterface
         Category $category
     ): void {
         $profile = new ArticleSeedProfile(
-            categories: [$category]
+            categories: [$category],
+            faker: $this->faker,
         );
 
         foreach ($this->generateChunks($n, $profile, $this->chunkSize) as $chunk) {

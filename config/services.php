@@ -136,6 +136,18 @@ return static function (): ContainerBuilder {
 
     if ($_ENV['APP_ENV'] !== 'prod') {
         $container
+            ->register(Faker\Generator::class)
+            ->setFactory(
+                [
+                    Faker\Factory::class,
+                    'create'
+                ]
+            )
+            ->setPublic(true)
+        ;
+        $container->setAlias('faker', \Faker\Generator::class);
+
+        $container
             ->autowire(\App\App\Service\Seeder\ChunkedSeeder::class)
             ->setArgument('$environment', $_ENV['APP_ENV'])
             ->setPublic(true);

@@ -12,22 +12,16 @@ use Tests\Unit\TestCaseUnit;
 
 class ArticleSeedProfileTest extends TestCaseUnit
 {
-    private Category $category;
-
-    protected function setUp(): void
+    #[Test]
+    public function generateReturnsArticle(): void
     {
-        parent::setUp();
-        $this->category = new Category(
+        $category = new Category(
             title: new CategoryTitle('Tech'),
             description: new CategoryDescription('Tech news'),
             id: 1
         );
-    }
 
-    #[Test]
-    public function generateReturnsArticleWithPlaceholdCoPicUrl(): void
-    {
-        $profile = new ArticleSeedProfile([$this->category]);
+        $profile = new ArticleSeedProfile(categories: [$category], faker: \Faker\Factory::create());
         $article = $profile->generate();
 
         self::assertInstanceOf(Article::class, $article);
@@ -35,20 +29,26 @@ class ArticleSeedProfileTest extends TestCaseUnit
         self::assertNotEmpty($article->getContent()->getValue());
         self::assertNotEmpty($article->getDescription()->getValue());
         self::assertStringStartsWith('https://placehold.co/', $article->getPicUri()->toString());
-        self::assertSame($this->category, $article->getCategory());
+        self::assertSame($category, $article->getCategory());
         self::assertNull($article->getId());
     }
 
     #[Test]
     public function generateUsesCustomParametersWhenProvided(): void
     {
-        $profile = new ArticleSeedProfile([$this->category]);
+        $category = new Category(
+            title: new CategoryTitle('Tech'),
+            description: new CategoryDescription('Tech news'),
+            id: 1
+        );
+
+        $profile = new ArticleSeedProfile(categories: [$category], faker: \Faker\Factory::create());
         $article = $profile->generate([
             'title' => 'Custom Title',
             'content' => 'Custom Content',
             'description' => 'Custom Description',
             'picUri' => 'https://example.com/test.png',
-            'category' => $this->category,
+            'category' => $category,
             'id' => 999,
         ]);
 
@@ -56,7 +56,7 @@ class ArticleSeedProfileTest extends TestCaseUnit
         self::assertSame('Custom Content', $article->getContent()->getValue());
         self::assertSame('Custom Description', $article->getDescription()->getValue());
         self::assertSame('https://example.com/test.png', $article->getPicUri()->toString());
-        self::assertSame($this->category, $article->getCategory());
+        self::assertSame($category, $article->getCategory());
         self::assertSame(999, $article->getId());
     }
 
@@ -64,10 +64,14 @@ class ArticleSeedProfileTest extends TestCaseUnit
     public function generateWorksWithGeneratorCategories(): void
     {
         $categoriesGenerator = (function () {
-            yield $this->category;
+            yield new Category(
+                title: new CategoryTitle('Tech'),
+                description: new CategoryDescription('Tech news'),
+                id: 1
+            );
         })();
 
-        $profile = new ArticleSeedProfile($categoriesGenerator);
+        $profile = new ArticleSeedProfile(categories: $categoriesGenerator, faker: \Faker\Factory::create());
         $article1 = $profile->generate();
         $article2 = $profile->generate();
 
