@@ -5,17 +5,17 @@ namespace App\App\Service\ArticleManagement\ValueObjects;
 use Uri\InvalidUriException;
 use Uri\Rfc3986\Uri;
 
-class ArticlePicUrl implements
+class ArticlePicUri implements
     \Stringable
 {
     public const int MAX_LENGTH = 65_535; // TEXT
     private Uri $value;
 
-    public function __construct(Uri|string $picUrl)
+    public function __construct(Uri|string $picUri)
     {
 
         try {
-            $uri = ($picUrl instanceof Uri) ? $picUrl : new Uri(trim($picUrl));
+            $uri = ($picUri instanceof Uri) ? $picUri : new Uri(trim($picUri));
 
             if (strlen($uri->toString()) > self::MAX_LENGTH) {
                 throw new \InvalidArgumentException(

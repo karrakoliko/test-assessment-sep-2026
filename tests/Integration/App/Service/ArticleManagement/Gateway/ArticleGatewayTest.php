@@ -32,7 +32,7 @@ class ArticleGatewayTest extends TestCaseIntegration
             title: 'title1',
             content: 'content1',
             description: 'desc1',
-            picUrl: 'https://example1.com/image1.jpg',
+            picUri: 'https://example1.com/image1.jpg',
             category: $c1
         );
 
@@ -40,7 +40,7 @@ class ArticleGatewayTest extends TestCaseIntegration
             title: 'title2',
             content: 'content2',
             description: 'desc2',
-            picUrl: 'https://example1.com/image2.jpg',
+            picUri: 'https://example1.com/image2.jpg',
             category: $c1
         );
 
@@ -48,7 +48,7 @@ class ArticleGatewayTest extends TestCaseIntegration
             title: 'title3',
             content: 'content3',
             description: 'desc3',
-            picUrl: 'https://example1.com/image3.jpg',
+            picUri: 'https://example1.com/image3.jpg',
             category: $c1
         );
 
@@ -97,7 +97,7 @@ class ArticleGatewayTest extends TestCaseIntegration
             title: 'article_title',
             content: 'article_content',
             description: 'article_desc',
-            picUrl: 'https://example.com/pic.jpg',
+            picUri: 'https://example.com/pic.jpg',
             category: $category
         );
 
@@ -113,7 +113,7 @@ class ArticleGatewayTest extends TestCaseIntegration
         self::assertSame('article_title', $found->getTitle()->getValue());
         self::assertSame('article_content', $found->getContent()->getValue());
         self::assertSame('article_desc', $found->getDescription()->getValue());
-        self::assertSame('https://example.com/pic.jpg', $found->getPicUrl()->toString());
+        self::assertSame('https://example.com/pic.jpg', $found->getPicUri()->toString());
         self::assertNotNull($found->getCategory());
         self::assertSame($category->getId(), $found->getCategory()->getId());
         self::assertSame('cat_test', $found->getCategory()->getTitle()->getValue());

@@ -42,7 +42,7 @@ class CategoryGatewayTest extends TestCaseIntegration
             title: 'title1',
             content: 'content1',
             description: 'desc1',
-            picUrl: 'https://example1.com/image1.jpg',
+            picUri: 'https://example1.com/image1.jpg',
             category: $c1
         );
 

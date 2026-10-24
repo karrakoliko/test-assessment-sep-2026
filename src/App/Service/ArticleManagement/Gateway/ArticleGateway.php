@@ -3,7 +3,7 @@
 namespace App\App\Service\ArticleManagement\Gateway;
 
 use App\App\Service\ArticleManagement\Article;
-use App\App\Service\ArticleManagement\ValueObjects\ArticlePicUrl;
+use App\App\Service\ArticleManagement\ValueObjects\ArticlePicUri;
 use App\App\Service\CategoryManagement\Category;
 use App\Core\Persistence\Database\TableDataGatewayInterface;
 use Doctrine\DBAL\Connection;
@@ -29,14 +29,14 @@ class ArticleGateway implements
                     title,
                     description,
                     content,
-                    pic_url,
+                    pic_uri,
                     category_id
                 )
                 VALUES (
                     :title,
                     :description,
                     :content,
-                    :pic_url,
+                    :pic_uri,
                     :category_id
                 )
                 SQL
@@ -70,9 +70,9 @@ class ArticleGateway implements
                     ->getValue(),
             );
             $q->bindValue(
-                'pic_url',
+                'pic_uri',
                 $article
-                    ->getPicUrl()
+                    ->getPicUri()
                     ->toString(),
             );
             $q->bindValue(
@@ -121,7 +121,7 @@ class ArticleGateway implements
                         a.title       AS article_title,
                         a.content     AS article_content,
                         a.description AS article_description,
-                        a.pic_url     AS article_pic_url
+                        a.pic_uri     AS article_pic_uri
                     FROM articles a
                     WHERE a.category_id = :category_id
                     ORDER BY a.created_at DESC, a.id DESC
@@ -141,8 +141,8 @@ class ArticleGateway implements
                 title: $row['article_title'],
                 content: $row['article_content'],
                 description: $row['article_description'],
-                picUrl: new ArticlePicUrl(
-                    $row['article_pic_url']
+                picUri: new ArticlePicUri(
+                    $row['article_pic_uri']
                 ),
                 category: $category,
                 id: $row['article_id'],
@@ -162,7 +162,7 @@ class ArticleGateway implements
                     a.title       AS article_title,
                     a.content     AS article_content,
                     a.description AS article_description,
-                    a.pic_url     AS article_pic_url,
+                    a.pic_uri     AS article_pic_uri,
                     c.id          AS category_id,
                     c.title       AS category_title,
                     c.description AS category_description
@@ -193,7 +193,7 @@ class ArticleGateway implements
             title: $row['article_title'],
             content: $row['article_content'],
             description: $row['article_description'],
-            picUrl: $row['article_pic_url'],
+            picUri: $row['article_pic_uri'],
             category: $category,
             id: (int)$row['article_id'],
         );

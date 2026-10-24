@@ -27,7 +27,7 @@ class RouteCompilerTest extends TestCase
     {
         $compiler = new RouteCompiler();
 
-        $uri = $compiler->compileToUrl($mask, $arguments);
+        $uri = $compiler->compileToUri($mask, $arguments);
 
         self::assertInstanceOf(Uri::class, $uri);
         self::assertSame($expectedUrl, $uri->toString());
@@ -41,7 +41,7 @@ class RouteCompilerTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessageIs('Missing required argument "id" for route mask "/category/{id}".');
 
-        $compiler->compileToUrl('/category/{id}', []);
+        $compiler->compileToUri('/category/{id}', []);
     }
 
     public static function provideUrlCompilationCases(): iterable

@@ -5,7 +5,7 @@ namespace App\App\Service\HomePage;
 use App\App\Service\ArticleManagement\Gateway\ArticleGateway;
 use App\App\Service\CategoryManagement\Gateway\CategoryGateway;
 use App\App\Service\HomePage\Dto\HomePageCategoryDto;
-use App\Core\Router\UrlGenerator\UrlGeneratorInterface;
+use App\Core\Router\UriGenerator\UriGeneratorInterface;
 use Doctrine\DBAL\Exception;
 
 class HomePageService
@@ -13,7 +13,7 @@ class HomePageService
     public function __construct(
         protected CategoryGateway $categoryGateway,
         protected ArticleGateway $articleGateway,
-        protected UrlGeneratorInterface $urlGenerator
+        protected UriGeneratorInterface $uriGenerator
     ) {
     }
 

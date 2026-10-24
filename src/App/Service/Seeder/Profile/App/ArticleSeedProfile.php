@@ -42,7 +42,7 @@ class ArticleSeedProfile implements SeedProfileInterface
      *     title?: string,
      *     content?: string,
      *     description?: string,
-     *     picUrl?: string,
+     *     picUri?: string,
      *     category?: Category,
      *     id?: int|null
      * } $params
@@ -54,7 +54,7 @@ class ArticleSeedProfile implements SeedProfileInterface
             title: $params['title'] ?? $this->faker->text(min(255, ArticleTitle::MAX_LENGTH)),
             content: $params['content'] ?? $this->faker->text(min(2048, ArticleContent::MAX_LENGTH)),
             description: $params['description'] ?? $this->faker->text(min(255, ArticleDescription::MAX_LENGTH)),
-            picUrl: $params['picUrl'] ?? sprintf('https://placehold.co/%dx%d', 600, 400),
+            picUri: $params['picUri'] ?? sprintf('https://placehold.co/%dx%d', 600, 400),
             category: $params['category'] ?? $this->faker->randomElement($this->categoriesReservoir),
             id: $params['id'] ?? null,
         );

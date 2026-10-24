@@ -15,5 +15,5 @@ interface RouteCompilerInterface
     /**
      * @param array<string, mixed> $arguments
      */
-    public function compileToUrl(string $mask, array $arguments = []): Uri;
+    public function compileToUri(string $mask, array $arguments = []): Uri;
 }

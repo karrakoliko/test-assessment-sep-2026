@@ -16,7 +16,7 @@ CREATE TABLE articles
     title       VARCHAR(255) NOT NULL,
     description LONGTEXT     NULL,
     content     LONGTEXT     NULL,
-    pic_url     TEXT         NULL,
+    pic_uri     TEXT         NULL,
     category_id BIGINT       NOT NULL,
     created_at  DATETIME(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 

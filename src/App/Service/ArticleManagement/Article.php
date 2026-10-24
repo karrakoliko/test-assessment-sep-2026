@@ -4,7 +4,7 @@ namespace App\App\Service\ArticleManagement;
 
 use App\App\Service\ArticleManagement\ValueObjects\ArticleContent;
 use App\App\Service\ArticleManagement\ValueObjects\ArticleDescription;
-use App\App\Service\ArticleManagement\ValueObjects\ArticlePicUrl;
+use App\App\Service\ArticleManagement\ValueObjects\ArticlePicUri;
 use App\App\Service\ArticleManagement\ValueObjects\ArticleTitle;
 use App\App\Service\CategoryManagement\Category;
 
@@ -14,21 +14,21 @@ class Article
     private ArticleContent $content;
     private ArticleDescription $description;
     private Category $category;
-    private ArticlePicUrl $picUrl;
+    private ArticlePicUri $picUri;
     private ?int $id;
 
     public function __construct(
         string $title,
         string $content,
         string $description,
-        string $picUrl,
+        string $picUri,
         Category $category,
         ?int $id = null
     ) {
         $this->title = new ArticleTitle($title);
         $this->content = new ArticleContent($content);
         $this->description = new ArticleDescription($description);
-        $this->picUrl = new ArticlePicUrl($picUrl);
+        $this->picUri = new ArticlePicUri($picUri);
         $this->category = $category;
         $this->id = $id;
     }
@@ -53,9 +53,9 @@ class Article
         return $this->category;
     }
 
-    public function getPicUrl(): ArticlePicUrl
+    public function getPicUri(): ArticlePicUri
     {
-        return $this->picUrl;
+        return $this->picUri;
     }
 
     public function getId(): ?int

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Core\Router\UrlGenerator;
+namespace App\Core\Router\UriGenerator;
 
 use Uri\Rfc3986\Uri;
 
-interface UrlGeneratorInterface
+interface UriGeneratorInterface
 {
     public function generate(string $routeName, array $arguments = []): Uri;
 

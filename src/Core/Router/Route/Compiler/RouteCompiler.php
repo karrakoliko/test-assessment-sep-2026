@@ -57,11 +57,11 @@ class RouteCompiler implements RouteCompilerInterface
      *
      * @param array<string, mixed> $arguments
      */
-    public function compileToUrl(string $mask, array $arguments = []): Uri
+    public function compileToUri(string $mask, array $arguments = []): Uri
     {
         $normalizedMask = '/' . trim($mask, '/');
 
-        $url = preg_replace_callback('/\{([a-zA-Z0-9_]+)\}/', function (array $matches) use ($arguments, $mask): string {
+        $uri = preg_replace_callback('/\{([a-zA-Z0-9_]+)\}/', function (array $matches) use ($arguments, $mask): string {
             $name = $matches[1];
             if (!array_key_exists($name, $arguments)) {
                 throw new \InvalidArgumentException(sprintf('Missing required argument "%s" for route mask "%s".', $name, $mask));
@@ -70,6 +70,6 @@ class RouteCompiler implements RouteCompilerInterface
             return (string) $arguments[$name];
         }, $normalizedMask);
 
-        return new Uri($url);
+        return new Uri($uri);
     }
 }

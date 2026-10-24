@@ -18,8 +18,8 @@ use App\Core\Router\Route\Argument\RouteArgument;
 use App\Core\Router\Route\Argument\RouteArguments;
 use App\Core\Router\Route\Route;
 use App\Core\Router\RouterInterface;
-use App\Core\Router\UrlGenerator\UrlGenerator;
-use App\Core\Router\UrlGenerator\UrlGeneratorInterface;
+use App\Core\Router\UriGenerator\UriGenerator;
+use App\Core\Router\UriGenerator\UriGeneratorInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Tools\DsnParser;
@@ -85,8 +85,8 @@ return static function (): ContainerBuilder {
         ->setPublic(true)
     ;
 
-    $container->autowire(UrlGenerator::class, UrlGenerator::class);
-    $container->setAlias(UrlGeneratorInterface::class, UrlGenerator::class);
+    $container->autowire(UriGenerator::class, UriGenerator::class);
+    $container->setAlias(UriGeneratorInterface::class, UriGenerator::class);
 
     $container
         ->register(Connection::class)

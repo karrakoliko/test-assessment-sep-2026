@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Router\UrlGenerator;
+namespace App\Core\Router\UriGenerator;
 
 use App\Core\Router\Route\Collection\RouteCollection;
 use App\Core\Router\Route\Compiler\RouteCompiler;
@@ -8,7 +8,7 @@ use App\Core\Router\Route\Compiler\RouteCompilerInterface;
 use Uri\InvalidUriException;
 use Uri\Rfc3986\Uri;
 
-class UrlGenerator implements UrlGeneratorInterface
+class UriGenerator implements UriGeneratorInterface
 {
     public function __construct(
         protected readonly RouteCollection $routes,
@@ -31,7 +31,7 @@ class UrlGenerator implements UrlGeneratorInterface
             throw new \InvalidArgumentException(sprintf('Route "%s" not found.', $routeName));
         }
 
-        $uri = $this->routeCompiler->compileToUrl(
+        $uri = $this->routeCompiler->compileToUri(
             $route->getMask(),
             $arguments
         );

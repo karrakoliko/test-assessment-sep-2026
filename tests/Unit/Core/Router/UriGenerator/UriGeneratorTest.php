@@ -1,23 +1,23 @@
 <?php
 
-namespace Tests\Unit\Core\Router\UrlGenerator;
+namespace Tests\Unit\Core\Router\UriGenerator;
 
 use App\Core\Router\ControllerReferenceInterface;
 use App\Core\Router\Route\Collection\RouteCollection;
 use App\Core\Router\Route\Compiler\RouteCompilerInterface;
 use App\Core\Router\Route\Route;
-use App\Core\Router\UrlGenerator\UrlGenerator;
+use App\Core\Router\UriGenerator\UriGenerator;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Uri\Rfc3986\Uri;
 
-class UrlGeneratorTest extends TestCase
+class UriGeneratorTest extends TestCase
 {
     #[Test]
     public function generateThrowsExceptionWhenRouteNotFound(): void
     {
         $routes = new RouteCollection();
-        $generator = new UrlGenerator($routes);
+        $generator = new UriGenerator($routes);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessageIs('Route "non_existing_route" not found.');
@@ -34,7 +34,7 @@ class UrlGeneratorTest extends TestCase
             name: 'home'
         );
         $routes = new RouteCollection([$route]);
-        $generator = new UrlGenerator($routes);
+        $generator = new UriGenerator($routes);
 
         $uri = $generator->generate('home');
 
@@ -51,7 +51,7 @@ class UrlGeneratorTest extends TestCase
             name: 'category_show'
         );
         $routes = new RouteCollection([$route]);
-        $generator = new UrlGenerator($routes);
+        $generator = new UriGenerator($routes);
 
         $uri = $generator->generate('category_show', ['id' => 42]);
 
@@ -72,11 +72,13 @@ class UrlGeneratorTest extends TestCase
 
         $compilerMock = $this->createMock(RouteCompilerInterface::class);
         $compilerMock->expects(self::once())
-            ->method('compileToUrl')
+            ->method(
+                'compileToUri'
+            )
             ->with('/custom/{name}', ['name' => 'test'])
             ->willReturn(new Uri('/custom/test'));
 
-        $generator = new UrlGenerator($routes, $compilerMock);
+        $generator = new UriGenerator($routes, $compilerMock);
 
         $uri = $generator->generate('custom_route', ['name' => 'test']);
 
@@ -92,7 +94,7 @@ class UrlGeneratorTest extends TestCase
             name: 'category_show'
         );
         $routes = new RouteCollection([$route]);
-        $generator = new UrlGenerator($routes);
+        $generator = new UriGenerator($routes);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessageIs('Missing required argument "id" for route mask "/category/{id}".');
@@ -109,7 +111,7 @@ class UrlGeneratorTest extends TestCase
             name: 'category_show'
         );
         $routes = new RouteCollection([$route]);
-        $generator = new UrlGenerator($routes);
+        $generator = new UriGenerator($routes);
 
         $uri = $generator->generate('category_show', ['id' => 42], ['sort' => 'desc', 'page' => 2]);
 
